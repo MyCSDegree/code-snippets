@@ -1,0 +1,12 @@
+#!/bin/bash
+# dmckee http://stackoverflow.com/a/1015684/2873157 for ls -Art | tail -n 1
+
+if [ -e output ]; then
+  rm output
+fi
+
+#fil=$( ls -Art ./ | tail -n 1 )
+#fil=$( ls -Art ./ | grep *.java  | tail -n 1 )
+fil=$( ls -Art ./ | grep .py  | tail -n 1 )
+
+python $fil
