@@ -146,18 +146,17 @@ void parse_hex(char *str, unsigned int *n) {
   } // while
 } // parse_hex
 
-void string_reverse(char *str) {
-  int i = strlen(str)-1;
-  int j = 0;
+char *strrev(char *str) {
+  char *p1, *p2;
 
-  char ch; // TODO: use an extra var or A + B = C ;)
-  while(i > j) {
-    ch = str[i];
-    str[i]= str[j];
-    str[j] = ch;
-
-    i--; j++;
+  if (! str || ! *str)
+    return str;
+  for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2) {
+    *p1 ^= *p2;
+    *p2 ^= *p1;
+    *p1 ^= *p2;
   }
+  return str;
 }
 
 const char hex_str[] = {
@@ -174,7 +173,7 @@ void format_base(int n, char* str, int base) {
     pos += 1;
   }
   str[pos] = '\0';
-  string_reverse(str);
+  str = strrev(str);
 }
 
 void show_number(unsigned int *n, char* str) {
