@@ -123,17 +123,9 @@ void parse_hex(char *str, unsigned int *n) {
   int digit = 0;
   while (iter > 0) {
     digit = hex_table[toupper(str[iter-1]) - '0'];
-#ifndef BUILD_LM
-    int i = 0;
-    int power = 1;
-    for (i = 0; i < count; i++)
-      power = power * 16;
-    *n = *n + (digit * power);
-#else
-    *n += digit * (int)pow(16, count);
-#endif
+    *n += digit * (0x1 << count);
 
-    count += 1;
+    count += 4;
     iter  -= 1;
   } // while
 } // parse_hex
