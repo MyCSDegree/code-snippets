@@ -82,15 +82,7 @@ void parse_binary(char* str, unsigned int *n) {
   while (iter > 0) {
     digit = (int)str[iter-1] - '0';
     if (digit) {// if 1 calc power
-#ifndef BUILD_LM
-      int i = 0;
-      int power = 1;
-      for (i = 0; i < count; i++)
-        power = power * 2;
-      *n = *n + power;
-#else
-      *n += (int)pow(2, count);
-#endif
+      *n += 1 << count;
     } // if(digit)
 
     count += 1;
