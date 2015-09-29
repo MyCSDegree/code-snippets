@@ -147,7 +147,7 @@ const char hex_str[] = {
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
   'A', 'B', 'C', 'D', 'E', 'F'
 };
-void format_base(int n, char* str, int base) {
+void format_base(unsigned int n, char* str, int base) {
   int pos = 0;
   int temp = 0;
   while(n != 0) {
@@ -171,6 +171,7 @@ void show_number(unsigned int *n, char* str) {
 int main() {
   char          str[uint_size+1]; // terminating null adds a char
   unsigned int  parsed_input = 0;
+
   /* input in binary */
   printf("binary input: ");
   get_input(str, max_bin);
