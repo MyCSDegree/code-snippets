@@ -107,30 +107,16 @@ int main() {
                           // m - n + 1
     memset(isprime,true,sizeof(isprime)); // set true all
 
-    for (int i = 0; i < numprimes; i++) {
-      /* int i = 0; i < numprimes; i++:
-       *    go from 0 to numprimes
-       *    iterate through primes?
-       *    all of primes from 0 to 32000
-       */
-      int p = primes[i]; // p point to prime at i
+    for (int i = 0; i < numprimes; i++) { // foreach primes as p
+      int p = primes[i];
 
-      // if p > cap; break;
-      // if prime greater than sqrt(N) + 1, we can have no more factors
-      // break!
-      if(p >= cap) break;
+      if(p >= cap) break; // since all factors of N will be less than
+                          // sqrt(N) + 1 (pt1); use that as a upper cap
+                          // this is the part of segmentation of sieve
 
+      int start; // the trickery starts!
 
-      // int start. now trickery start?
-      int start;
-
-      // if p >= M, start = p * 2
-      /* wtaf?
-       * prime[i] >= M, start = prime[i] * 2;
-       * grrr... get back to this later.
-       *
-       *
-       * backnow
+      /**
        * if P >= M (when we are startin with P, which is prime,)
        * then multiply it by 2;
        * what do we have to do? hop in P's
@@ -141,7 +127,8 @@ int main() {
        * p >> M so that p * 2 > N?
        * won't happen. why?
        * if(p >= cap) break; line present above.
-       */
+       *
+       **/
       if (p >= M) start = p*2;
 
       /*
@@ -182,11 +169,8 @@ int main() {
        * tofill: 3
        * ...
        *
-       * now that that was done, indexes: a PITA!
        */
       else start = M + ((p - M % p) % p);
-
-      //printf("%d\n", 3 % 5);
 
       /* this looks familiar.
        * j from start, when j <= n; j += p
@@ -204,27 +188,21 @@ int main() {
       } // done marking primes for particular prime p.
     } // for
 
-    // grr, strange code again!!! look out for these :(
-    /*
-     * if even, M
-     * if  odd, M+1
-     *
-     * WHY!?
-     */
+    // if m % 2 is even, start = m + 1
+    // if m % 2 is odd , start = m
+    // in short; always get odd term to begin with.
     int start = (M % 2)?M:M+1;
+    // m == 5, start = 5
 
-    /* checks for two again?
-     * if lower = 2, print 2.
-     * since, why???
-     * TODO: ... ????
-     * */
-    if (M == 2) {
+    if (M == 2) { // if m < 2, m = 2; if m == 2, printf 2;
+      // note: this does not modify above checks
+      // 2 % 2 = 0; hence start for m == 2 becomes 1.
       printf("2\n");
     }
 
-    /* this is familiar! from start to N, and i += 2 (!?!?!?) */
+    /* this is familiar! from start to N, and i += 2 (first term was odd, add 2)*/
     for (int i = start; i <= N; i+=2) {
-      // if isprime(i - M) print
+      // if isprime(i - 5) print
       if (isprime[i-M]) printf("%d\n",i);
     }
 
