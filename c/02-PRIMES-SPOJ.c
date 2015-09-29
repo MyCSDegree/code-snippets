@@ -5,98 +5,81 @@
  * this is commented so that i can get a better understanding of the working
  * of this prime generator.
  *
- * no ill intend to the original author meant.
+ * no disrespect to the original author meant.
  */
 
-/* standard headers ?? */
-#include <stdio.h> // printf
-#include <string.h> // meh, idk? TODO: try removing this ? o.O
-#include <stdbool.h> // bool, for simple bool
-#include <math.h> // sqrt
+#include <stdio.h>   // for printf/scanf
+#include <string.h>  // for memset
+#include <stdbool.h> // for bool
+#include <math.h>    // for sqrt
 
+/**
+ * question:
+ *    Peter wants to generate some prime numbers for his cryptosystem. Help him!
+ *    Your task is to generate all prime numbers between two given numbers!
+ * input:
+ *    the input begins with the number t of test cases in a single line (t<=10).
+ *    In each of the next t lines there are two numbers m and n separated
+ *    by a space.
+ *      1 <= m <= n <= 1000000000;
+ *      n-m <= 100000;
+ * output:
+ *    for every test case print all prime numbers p such that
+ *      m <= p <= n,
+ *    one number per line. test cases separated by an empty line.
+ *
+**/
 
-/* initial params */
-// 1 <= m <= n <= 1000000000
-// 1,000,000,000 : 10 ^ 9
-// sqrt 10 ^ 9 = 31622.7766017;
-//        ceil = 31623
-
-// n - m <= 100000
-// 1,00,000 : 10 ^ 5
-
+/**
+ * pts:
+ * 1. all factors of a number n will be less than sqrt(n) + 1
+ *    eg:
+ *      42 = 7 x 3 x 2
+ *      49 = 7 x 7
+ *      56 = 7 x 2 x 2 x 2
+**/
 
 int main() {
-  /* number of primes ??? less than 32000, there are 3432 primes.
-   * why is this important? inital seeding? get back to this!!!
-   * TODO:!!!
+  /**
+   * the number of prime numbers less than a particular number, in this case
+   * given, sqrt(10 ^ 9), viz. number of primes less than ~32000.
    *
-   * TODO: wwhy 4000? guess 4000.
-   */
+   * TODO: guessing 4000? that's difficult. Refer to Prime-Counting functions.
+   *       at any case, the riemann hypothesis is the only function that gives
+   *       a reasonable output? (delta ~= 10% in most cases)
+   *
+   *       since we can't implement that, and preferably pre-processor
+   *       directives need to be used, manually calc this first, or use dma,
+   *       and/or vectors.
+  **/
   int primes[4000];
-  /* numprimes. being used quite a bit */
-  int numprimes = 0;
+  int numprimes = 0; // this variable keeps track of total number of primes
 
-/* generate all prime numbers till 32000 */
-  /* initialize primes[0] to 2, increase nprime */
-  primes[numprimes++] = 2;
-  for (int i = 3; i <= 32000; i+=2) {
-    /* increase by 3's  updto 32000; sqrt 10^9: ~ <32000 */
-
+  /**
+   * generate all prime numbers till 32000
+  **/
+  primes[numprimes++] = 2; // initialize primes[0] to 2, increase nprime
+  for (int i = 3; i <= 32000; i+=2) { // increase from 3 by 2's  upto 32000;
     bool isprime = true; // initial bool for check
 
-    /* okay, set cap to be sqrt(i) + 1 */
-    // i =  3; cap = 2
-    // i =  5; cap = 3
-    // i =  7; cap = 3
-    // i =  9; cap = 4
-    // i = 11; cap = 4
-    // i = 13; cap = 4
-    // i = 15; cap = 4
-    // i = 10; cap = 4 // cap ^ 2 > i? why?
-    // i = 30; cap = 6 // cap ^ 2 > i? why?
-    int cap = sqrt(i)+1; // NOT ceil (sqrt(i) ????????
-    //dbg: printf("%d: %d\n", i, cap);
+    int cap = sqrt(i) + 1;  // since all factors of i will be less than
+                            // sqrt(i) + 1 (pt1); use that as a upper cap
 
     for (int j = 0; j < numprimes; j++) {
-    // this part i do NOT understand, along with lots of others.
-    // for j = 0; j < numprimes; j++
+      if (primes[j] >= cap) break; // refer to pt1
 
-    /* primes = [2]
-     * for j = 0; j < 1; j++
-     *    if primes[j] >= cap; break;
-     *
-     * if primes[j] >= cap // cap = sqrt(i) + 1
-     *    break;
-     * why primes[j] >= cap?
-     * for every number i, prime factorization of it,
-     * least number of prime factor WILL be less than
-     * sqrt(i) + 1;
-     *
-     * eg:
-     * 42 = 7 x 3 x 2
-     * 49 = 7 x 7
-     * 56 = 7 x 2 x 2 x 2
-     *
-     * thus, if primes[j] go above cap, we can no find more factors
-     * so, break;
-     */
-      if (primes[j] >= cap) break; //<-------------------------------------|
-                                                                    //     |
-      if (i % primes[j] == 0) {                                     //     |
-      /* if (i % primes[j] == 0): i divisible by primes[j]*/        //     |
-      /* which means, i is divisible by 1 */                        //     |
-      // this relates to above lines, idk how!!!!                   // -----
+      if (i % primes[j] == 0) { // i divisible by primes[j]
         isprime = false;
         break;
-      }
-    }
-    // if still prime, add to prime numbers list!!!
-    if (isprime) primes[numprimes++] = i;
-  }
+      } // if (i divisible by primes[j])
+    } // for all primes
 
-  //dbg: printf("primes: %d\n", numprimes);
-/* generate all prime numbers till 32000 */
+    if (isprime) primes[numprimes++] = i; // if isprime, primes[] = i
+  } // for i = 3 -> 32000; i += 2
 
+  /**
+   * generate all prime numbers till 32000 (end)
+  **/
 
   /* start with T, N, M  variables*/
   int T,N,M;
@@ -105,44 +88,26 @@ int main() {
   scanf("%d",&T);
 
   for (int t = 0; t < T; t++) {
-    /* print new line @ end of every run */
-    if (t) printf("\n");
+    if (t) printf("\n"); // refer output;'test cases separated by an empty line'
 
-    /* scan two numbers */
-    scanf("%d %d",&M,&N);
+    scanf("%d %d",&M,&N); //scan two numbers
 
-    /* start with 2?
-     * why oh why?
-     * no primes less than two
-     * should/can we remove this checkfix?
-     * FIXME:
-     *
-     * is M going to affect working of primes? if yes, do not remove
-     * this checkfix.
-     * */
+    /**
+     * if we have an M less than 2, we start with 2.
+     * why?
+     *  a prime is defined as any number greater than n that is divisible by
+     *  n and itself.
+     * hence, and also makes this easier
+    **/
     if (M < 2) M = 2;
 
-    /* max = sqrt(N) + 1
-     * again, max factor that can be is:
-     * sqrt(N) + 1
-     *
-     * */
-    int cap = sqrt(N) + 1;
+    int cap = sqrt(N) + 1; // initialize a cap for N
 
-    /* interval: 100000; */
-    /*
-      * why 100000 + 1 ?
-      * for a range of m:n, total number of values
-      * are: m - n + 1
-      *
-      * */
-    bool isprime[100001];
+    bool isprime[100001]; // for a range of m:n, total number of values are:
+                          // m - n + 1
     memset(isprime,true,sizeof(isprime)); // set true all
 
     for (int i = 0; i < numprimes; i++) {
-      // W.T.A.F!!?A>>A??
-      /* this is where i was.. grr... */
-
       /* int i = 0; i < numprimes; i++:
        *    go from 0 to numprimes
        *    iterate through primes?
@@ -265,6 +230,5 @@ int main() {
 
   } // end for T
 
-  // finally, return 0;
   return 0;
 }
